@@ -116,7 +116,6 @@
             }
         },
         mounted(){
-            this.getAllTodos();
         },
         methods: {
             getAllTodos(data) {

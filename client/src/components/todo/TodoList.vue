@@ -88,7 +88,6 @@
             }
         },
         mounted(){
-            this.getAllTodoLists();
         },
         methods: {
             getAllTodoLists() {
