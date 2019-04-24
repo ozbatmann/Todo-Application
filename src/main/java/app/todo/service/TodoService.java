@@ -1,13 +1,11 @@
 package app.todo.service;
 
 import app.todo.TodoStatus;
-import app.todo.dao.DependentDao;
 import app.todo.dao.TodoDao;
 import app.todo.dao.TodoListDao;
 import app.todo.dto.base.BaseDto;
 import app.todo.dto.base.ListDto;
 import app.todo.dto.base.ObjectDto;
-import app.todo.model.Dependent;
 import app.todo.model.Todo;
 import app.todo.model.TodoList;
 import app.todo.model.request.TodoRequest;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -25,10 +22,7 @@ import java.util.UUID;
 public class TodoService {
 
     @Autowired TodoDao todoDao;
-    @Autowired
-    TodoListDao todoListDao;
-    @Autowired
-    DependentDao dependentDao;
+    @Autowired TodoListDao todoListDao;
 
 
     public BaseDto getAllTodosByTodoListId(String todoListId,String sortBy, String direction,String name,String todoStatus) {
@@ -36,14 +30,7 @@ public class TodoService {
         List<Todo> todoList;
 
         try {
-            if(!name.equals("null") && !todoStatus.equals("null"))
-                todoList = this.todoDao.findByAndSort(UUID.fromString(todoListId),name, TodoStatus.valueOf(todoStatus), Sort.by(Sort.Direction.fromString(direction),sortBy));
-            else if(name.equals("null") && !todoStatus.equals("null"))
-                todoList = this.todoDao.findByTodoStatusAndSort(UUID.fromString(todoListId),TodoStatus.valueOf(todoStatus), Sort.by(Sort.Direction.fromString(direction),sortBy));
-            else if(!name.equals("null"))
-                todoList = this.todoDao.findByNameAndSort(UUID.fromString(todoListId),name,Sort.by(Sort.Direction.fromString(direction),sortBy));
-            else
-                todoList = this.todoDao.findAllByTodoListIdAndSort(UUID.fromString(todoListId),Sort.by(Sort.Direction.fromString(direction),sortBy));
+            todoList = this.todoDao.findByTodoListIdAndSort(UUID.fromString(todoListId),name,todoStatus, Sort.by(Sort.Direction.fromString(direction),sortBy));
 
             baseDto = new ListDto<>(todoList);
             baseDto.setReturnWithMessageResponseStats("All Todo Items Successfully Listed", true);
@@ -97,10 +84,7 @@ public class TodoService {
                         return baseDto;
                     }
                     else {
-                        Dependent dependentTo = new Dependent();
-                        dependentTo.setDependentTodo(dependent);
-                        dependentDao.save(dependentTo);
-                        todo.setDependentTodo(dependentTo);
+                        todo.setDependentTodo(dependent);
                     }
             }
 
@@ -137,10 +121,7 @@ public class TodoService {
                         return baseDto;
                     }
                     else {
-                        Dependent dependentTo = new Dependent();
-                        dependentTo.setDependentTodo(dependent);
-                        dependentDao.save(dependentTo);
-                        todo.setDependentTodo(dependentTo);
+                        todo.setDependentTodo(dependent);
                     }
             }
 

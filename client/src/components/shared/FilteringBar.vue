@@ -74,7 +74,7 @@
             <v-item
                     v-for="(chip,index) in chips"
                     :key="index">
-                <v-chip v-if="chip.value !== null"
+                <v-chip v-if="chip.value !== ''"
                         slot-scope="{ active, toggle }"
                         close
                         @input="onClose(chip)">
@@ -96,8 +96,8 @@
                 menu: false,
                 showChips: false,
                 filter:[
-                    {key: 'Name', value: null},
-                    {key: 'Status', value: null}],
+                    {key: 'Name', value: ''},
+                    {key: 'Status', value: ''}],
                 todoStatus: ['INCOMPLETE','COMPLETE','EXPIRED'],
                 chips:[],
 
@@ -115,7 +115,7 @@
                 this.menu = false;
             },
             onClose(item){
-                this.chips.find(chip => chip === item).value = null;
+                this.chips.find(chip => chip === item).value = '';
                 this.processFiltering();
             }
         }

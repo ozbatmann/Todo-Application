@@ -1,9 +1,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VuexPersistence from 'vuex-persist'
 
-Vue.use(Vuex)
+const vuexPersistenceConfig = {
+    persistence : {
+        storage: window.localStorage,
+    }
+};
+
+const vuexLocal = new VuexPersistence(vuexPersistenceConfig);
+
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
+    plugins: [vuexLocal.plugin],
     state: {
         userValidation: false,
         userId: null,

@@ -1,7 +1,8 @@
 package app.todo.dto.todo;
 
 import app.todo.TodoStatus;
-import app.todo.model.Dependent;
+import app.todo.model.Todo;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -19,9 +20,9 @@ public class TodoItems {
 
     private Date endDate;
 
-    private Dependent dependentTodo;
+    private Todo dependentTodo;
 
-    public TodoItems(UUID todoId, String name, String description, TodoStatus todoStatus, Date createdDate, Date endDate, Dependent dependentTodo) {
+    public TodoItems(UUID todoId, String name, String description, TodoStatus todoStatus, Date createdDate, Date endDate, Todo dependentTodo) {
         this.todoId = todoId;
         this.name = name;
         this.description = description;
@@ -79,11 +80,11 @@ public class TodoItems {
         this.endDate = endDate;
     }
 
-    public Dependent getDependentTodo() {
+    public Todo getDependentTodo() {
         return dependentTodo;
     }
 
-    public void setDependentTodo(Dependent dependentTodo) {
+    public void setDependentTodo(Todo dependentTodo) {
         this.dependentTodo = dependentTodo;
     }
 }

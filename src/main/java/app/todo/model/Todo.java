@@ -35,10 +35,11 @@ public class Todo {
     @Enumerated(EnumType.STRING)
     @Column(name = "todo_status", nullable = false, unique = false)
     private TodoStatus todoStatus;
-
+    
+    @JoinColumn(name ="dependent")
     @OneToOne
-    @JoinColumn(name = "dep_todo_id", nullable = true)
-    private Dependent dependentTodo;
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Todo dependentTodo;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -95,11 +96,11 @@ public class Todo {
         this.todoList = todoList;
     }
 
-    public Dependent getDependentTodo() {
+    public Todo getDependentTodo() {
         return dependentTodo;
     }
 
-    public void setDependentTodo(Dependent dependentTodo) {
+    public void setDependentTodo(Todo dependentTodo) {
         this.dependentTodo = dependentTodo;
     }
 

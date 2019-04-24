@@ -102,11 +102,9 @@
                     todoStatus: null,
                     todoListId: null,
                     endDate: null,
-                    dependentTodo: {
-                        id:null,
-                        name:null
-                    }
+                    dependentTodo: null
                 },
+                tmp: null,
                 todoStatus: ['INCOMPLETE','COMPLETE','EXPIRED'],
                 todoItems:[]
             }
@@ -134,9 +132,9 @@
                     this.data.todoStatus = data.todoStatus;
                     this.data.todoListId = data.todoList.id;
                     this.data.endDate = data.endDate;
-                    debugger;
-                    this.data.dependentTodo = data.dependentTodo != null ? data.dependentTodo.dependentTodo : undefined;
+                    this.data.dependentTodo = data.dependentTodo
                     this.isEdit = true;
+                    console.log(this.data.dependentTodo)
                 } else {
                     this.clear();
                 }

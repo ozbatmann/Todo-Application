@@ -45,7 +45,7 @@
                                 <td class="text-xs-left">{{ props.item.createdDate }}</td>
                                 <td class="text-xs-left">{{ props.item.endDate }}</td>
                                 <td class="text-xs-left">{{ props.item.todoStatus }}</td>
-                                <td v-if="props.item.dependentTodo != null" class="text-xs-left">{{ props.item.dependentTodo.dependentTodo.name }}</td>
+                                <td v-if="props.item.dependentTodo != null" class="text-xs-left">{{ props.item.dependentTodo.name }}</td>
                                 <td v-else class="text-xs-left">{{ props.item.dependentTodo }}</td>
                             </table-row-action>
                         </template>
@@ -72,20 +72,19 @@
             return{
                 loading: false,
                 headers: [
-                    {text: 'Name', value: 'name',filteredData: null},
-                    {text: 'Description', value: 'description',filteredData: null},
-                    {text: 'Creation Date', value: 'createdDate',filteredData: null},
-                    {text: 'End Date', value: 'endDate',filteredData: null},
-                    {text: 'Status', value: 'todoStatus',filteredData: null},
-                    {text: 'Dependent', value: 'dependent',filteredData: null},
+                    {text: 'Name', value: 'name'},
+                    {text: 'Description', value: 'description'},
+                    {text: 'Creation Date', value: 'createdDate'},
+                    {text: 'End Date', value: 'endDate'},
+                    {text: 'Status', value: 'todoStatus'},
+                    {text: 'Dependent', value: 'dependent', sortable: false},
                 ],
                 tableItems: [],
                 totalItems: 0,
                 pagination: {
                     rowsPerPage: 5,
                     sortBy: 'name',
-                    descending: '',
-                    ascending: '',
+                    descending: false,
                     page: 1
 
                 },
@@ -120,7 +119,7 @@
         methods: {
             getAllTodos(data) {
                 this.loading = true;
-                this.$http.get(`/todo?todoListId=${this.$route.params.id}&sortBy=${this.pagination.sortBy}&direction=${this.pagination.descending === false ? 'asc' : 'desc'}&name=${data !== undefined ? data[0].value : null }&todoStatus=${data !== undefined ? data[1].value : null}`).then((result) => {
+                this.$http.get(`/todo?todoListId=${this.$route.params.id}&sortBy=${this.pagination.sortBy}&direction=${this.pagination.descending  ? 'desc' : 'asc'}&name=${data !== undefined ? data[0].value : '' }&todoStatus=${data !== undefined ? data[1].value : ''}`).then((result) => {
                     this.tableItems = result.data.data;
                     this.totalItems = result.data.count;
                     this.loading = false;
@@ -139,16 +138,19 @@
                 })
             },
             addTodo(todo) {
-                this.$http.post("/todo", todo).then((result) => {
+                var data = todo;
+                if(todo.dependentTodo !== null){
+                    data.dependentTodo = todo.dependentTodo.id
+                }
+                this.$http.post("/todo", data).then((result) => {
                     this.getAllTodos();
                 }).catch((error) => {
                     console.log(error);
                 })
             },
             editTodo(todo) {
-
                 var data = todo;
-                if(typeof todo.dependentTodo === 'object'){
+                if(todo.dependentTodo !== null){
                     data.dependentTodo = todo.dependentTodo.id
                 }
                 this.$http.put("/todo", data).then((result) => {
